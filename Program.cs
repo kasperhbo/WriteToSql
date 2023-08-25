@@ -2,9 +2,11 @@
 
 string totalThreadsString;
 string totalRowsPerThreadString;
+string sleepThreadString;
 
 int threadCount;
 int rowsPerThread;
+int sleepBetweenWrites;
 
 Console.WriteLine("IP Address");
 string ipAddress = Console.ReadLine();
@@ -24,6 +26,9 @@ string database = Console.ReadLine();
 Console.WriteLine("Total threads to use: ");
 totalThreadsString = Console.ReadLine();
 
+Console.WriteLine("Sleep between writes to use in ms (1000 = 1sec): ");
+sleepThreadString = Console.ReadLine();
+
 Console.WriteLine("Total rows to create per thread: ");
 totalRowsPerThreadString = Console.ReadLine();
 
@@ -31,6 +36,7 @@ totalRowsPerThreadString = Console.ReadLine();
 // convert to integer
 threadCount = Convert.ToInt32(totalThreadsString);
 rowsPerThread = Convert.ToInt32(totalRowsPerThreadString);
+sleepBetweenWrites = Convert.ToInt32(sleepThreadString);
 
 var startTime = DateTime.Now;
 
@@ -51,6 +57,7 @@ void InsertData(){
         string sqlInsert = String.Format("INSERT INTO test_table (col1, col2) VALUES ({0}, {1})", i.ToString(), rand.Next(0, 10000).ToString());
         MySqlCommand cmdInsert = new MySqlCommand(sqlInsert, connection);
         cmdInsert.ExecuteNonQuery();
+        Thread.Sleep(sleepBetweenWrites);
     }
     
     connection.Close();
